@@ -1,0 +1,74 @@
+﻿<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>OpenLayers Demo</title>
+    <style type="text/css">
+
+    </style>
+  <link rel="stylesheet" href="ttt/bootstrap.min.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="ttt/bootstrap.js"></script>
+	<script src="OpenLayers.js"></script>
+    <script>
+	
+	var map,mapnik, fromProjection, position, zoom;
+	
+      function StartMaps() {
+        
+
+		map = new OpenLayers.Map("maps");
+			mapnik         = new OpenLayers.Layer.OSM();
+			map.addLayer(mapnik);
+
+       
+      }
+	  
+	  function redrawMaps(str,xs,ys){
+		document.getElementById('myModalLabel').innerHTML = str;
+		
+		zoom           = 10; 
+		fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+		toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+		position       = new OpenLayers.LonLat(ys,xs).transform( fromProjection, toProjection);
+		
+		 var markers = new OpenLayers.Layer.Markers( "Markers" );
+            map.addLayer(markers);
+
+		 var size = new OpenLayers.Size(21,25);
+           var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+           var icon = new OpenLayers.Icon('marker.png',size,offset);
+            markers.addMarker(new OpenLayers.Marker(position,icon));
+
+		
+		map.setCenter(position, zoom );
+	  //55.7472,37.6337
+	  }
+    </script>
+  </head>
+  <body onload="StartMaps();">
+   
+	
+	<ul>
+	<li><a href = '' onclick='redrawMaps("Рязань",54.6277,39.7430)' data-toggle="modal" data-target="#myModal">Рязань</a></li>
+	<li><a href = '' onclick='redrawMaps("Москва",55.7472,37.6337)' data-toggle="modal" data-target="#myModal">Москва</a></li>
+	<li><a href = '' onclick='redrawMaps("Волгоград",48.7073,44.5111)' data-toggle="modal" data-target="#myModal">Волгоград</a></li>
+	<li><a href = '' onclick='redrawMaps("Астрахань",46.3460,48.0336)' data-toggle="modal" data-target="#myModal">Астрахань</a></li>
+	</ul>
+	 
+ <div id="myModal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Modal Heading</h4>
+        </div>
+        <div class="modal-body">
+        <div id='maps' style=' width: 570px; height: 400px;'></div>
+        </div>
+       </div>
+    </div>
+  </div>
+	
+  </body>
+</html>
